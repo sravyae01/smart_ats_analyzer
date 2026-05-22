@@ -1,0 +1,81 @@
+<!-- templates/dashboard/jobseeker_dashboard.html -->
+{% extends 'base.html' %}
+{% block title %}Dashboard - ATS Analyzer{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Welcome Section -->
+    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg shadow-lg p-6 mb-8 text-white">
+        <h1 class="text-2xl font-bold">Welcome back, {{ user.first_name|default:user.email }}! 👋</h1>
+        <p class="mt-2">Track your resume performance and improve your ATS score.</p>
+    </div>
+    
+    <!-- Stats Grid -->
+    <div class="grid md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white rounded-lg shadow p-4">
+            <div class="text-2xl font-bold text-blue-600">{{ stats.total_analyses }}</div>
+            <div class="text-sm text-gray-600">Total Analyses</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4">
+            <div class="text-2xl font-bold text-green-600">{{ stats.average_score|floatformat:0 }}%</div>
+            <div class="text-sm text-gray-600">Average Score</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4">
+            <div class="text-2xl font-bold text-purple-600">{{ stats.best_score|floatformat:0 }}%</div>
+            <div class="text-sm text-gray-600">Best Score</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4">
+            <div class="text-2xl font-bold text-orange-600">{{ stats.credits_remaining }}</div>
+            <div class="text-sm text-gray-600">Credits Left</div>
+        </div>
+    </div>
+    
+    <!-- Quick Action -->
+    <div class="bg-white rounded-lg shadow p-6 mb-8 text-center">
+        <h2 class="text-xl font-semibold mb-4">Ready to optimize your resume?</h2>
+        <a href="{% url 'analyzer:new' %}" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition inline-flex items-center">
+            <i class="fas fa-plus mr-2"></i> New Analysis
+        </a>
+    </div>
+    
+    <!-- Recent Analyses -->
+    <div class="bg-white rounded-lg shadow">
+        <div class="p-6 border-b">
+            <h2 class="text-xl font-semibold">Recent Analyses</h2>
+        </div>
+        <div class="divide-y">
+            {% for analysis in analyses %}
+            <div class="p-6 hover:bg-gray-50">
+                <div class="flex items-center justify-between flex-wrap">
+                    <div>
+                        <p class="font-medium text-gray-900">
+                            Analysis from {{ analysis.created_at|date:"M d, Y" }}
+                        </p>
+                        <p class="text-sm text-gray-500 mt-1">
+                            Missing: {{ analysis.missing_keywords|slice:":3"|join:", " }}
+                        </p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="text-2xl font-bold 
+                            {% if analysis.ats_score >= 70 %}text-green-600
+                            {% elif analysis.ats_score >= 50 %}text-yellow-600
+                            {% else %}text-red-600{% endif %}">
+                            {{ analysis.ats_score }}%
+                        </div>
+                        <a href="{% url 'analyzer:results' analysis.id %}" class="text-blue-600 hover:text-blue-700">
+                            View Details <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="p-6 text-center text-gray-500">
+                <i class="fas fa-chart-line text-4xl mb-2"></i>
+                <p>No analyses yet. Upload your first resume to get started!</p>
+                <a href="{% url 'analyzer:new' %}" class="inline-block mt-4 text-blue-600">Start Analysis →</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

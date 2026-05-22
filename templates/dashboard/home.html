@@ -1,0 +1,290 @@
+<!-- templates/dashboard/home.html - FREE VERSION WITH AI ASSISTANT CARD -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Welcome Section -->
+    <div class="bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg shadow-lg p-6 mb-8 text-white">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">Welcome back, {{ user.first_name|default:user.email }}! 🎉</h1>
+                <p class="mt-2">Track your resume performance and improve your ATS score.</p>
+            </div>
+            <div class="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full">
+                <i class="fas fa-check-circle"></i> 
+                <span class="font-semibold">ATS Ready</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Stats Grid - 3 columns (removed credits) -->
+    <div class="grid md:grid-cols-3 gap-4 mb-8">
+        <div class="bg-white rounded-lg shadow p-4 text-center">
+            <div class="text-2xl font-bold text-blue-600">{{ stats.total_analyses|default:0 }}</div>
+            <div class="text-sm text-gray-600">Total Analyses</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 text-center">
+            <div class="text-2xl font-bold text-green-600">{{ stats.average_score|floatformat:0|default:0 }}%</div>
+            <div class="text-sm text-gray-600">Average Score</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 text-center">
+            <div class="text-2xl font-bold text-purple-600">{{ stats.best_score|floatformat:0|default:0 }}%</div>
+            <div class="text-sm text-gray-600">Best Score</div>
+        </div>
+    </div>
+    
+    <!-- FREE Forever Banner -->
+    <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 mb-8 text-center border border-green-200">
+        <div class="flex items-center justify-center gap-3 flex-wrap">
+            <i class="fas fa-gem text-green-600 text-2xl"></i>
+            <p class="font-semibold text-gray-900">
+                🎉 <span class="text-green-600">Completely FREE!</span> Unlimited resume analyses
+            </p>
+            <span class="bg-green-600 text-white px-3 py-1 rounded-full text-sm">
+                <i class="fas fa-check-circle mr-1"></i> Forever Free
+            </span>
+        </div>
+    </div>
+    
+    <!-- Trust Badges -->
+    <div class="grid md:grid-cols-2 gap-4 mb-8">
+        <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 text-center border border-green-200">
+            <div class="text-2xl font-bold text-green-600">{{ stats.total_resumes_analyzed|default:0 }}+</div>
+            <div class="text-sm text-gray-700">Resumes Analyzed</div>
+        </div>
+        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 text-center border border-blue-200">
+            <div class="text-2xl font-bold text-blue-600">85%</div>
+            <div class="text-sm text-gray-700">Interview Success Rate</div>
+        </div>
+    </div>
+    
+    <!-- AI ASSISTANT CARD - NEW FEATURE -->
+    <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-6 mb-8 border border-purple-200">
+        <div class="flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
+                    <i class="fas fa-robot text-white text-3xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-800">AI Resume Assistant 🤖</h3>
+                    <p class="text-gray-600">Get instant tips to improve your resume, ATS score, and interview preparation</p>
+                    <div class="flex gap-2 mt-2">
+                        <span class="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">💡 Resume Tips</span>
+                        <span class="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">🔑 Keywords</span>
+                        <span class="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">📊 ATS Advice</span>
+                        <span class="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">🎯 Interview Prep</span>
+                    </div>
+                </div>
+            </div>
+            <a href="{% url 'analyzer:chat' %}" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg hover:opacity-90 transition shadow-md flex items-center gap-2">
+                <i class="fas fa-comment-dots"></i> Chat with AI Assistant
+                <i class="fas fa-arrow-right ml-1"></i>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Quick Action -->
+    <div class="bg-white rounded-lg shadow p-6 mb-8 text-center">
+        <h2 class="text-xl font-semibold mb-4">Ready to optimize your resume?</h2>
+        <a href="{% url 'analyzer:new' %}" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition inline-flex items-center">
+            <i class="fas fa-plus mr-2"></i> New Analysis
+        </a>
+    </div>
+    
+    <!-- Recent Analyses with Infinite Scroll -->
+    <div class="bg-white rounded-lg shadow">
+        <div class="p-6 border-b">
+            <h2 class="text-xl font-semibold">Recent Analyses</h2>
+        </div>
+        <div id="recent-analyses-container" class="divide-y">
+            {% if analyses %}
+                {% for analysis in analyses %}
+                <div class="p-6 hover:bg-gray-50 analysis-item">
+                    <div class="flex items-center justify-between flex-wrap">
+                        <div>
+                            <p class="font-medium text-gray-900">
+                                Analysis from {{ analysis.created_at|date:"M d, Y" }}
+                            </p>
+                            <p class="text-sm text-gray-500 mt-1">
+                                Score: {{ analysis.ats_score }}%
+                            </p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <div class="text-2xl font-bold 
+                                {% if analysis.ats_score >= 70 %}text-green-600
+                                {% elif analysis.ats_score >= 50 %}text-yellow-600
+                                {% else %}text-red-600{% endif %}">
+                                {{ analysis.ats_score }}%
+                            </div>
+                            <a href="{% url 'analyzer:results' analysis.id %}" class="text-blue-600 hover:text-blue-700">
+                                View Details <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="p-6 text-center text-gray-500">
+                    <i class="fas fa-chart-line text-4xl mb-2"></i>
+                    <p>No analyses yet. Upload your first resume to get started!</p>
+                    <a href="{% url 'analyzer:new' %}" class="inline-block mt-4 text-green-600">Start Analysis →</a>
+                </div>
+            {% endif %}
+        </div>
+        <div id="loading-spinner" class="text-center py-4 hidden">
+            <i class="fas fa-spinner fa-spin text-green-600 text-2xl"></i>
+            <p class="text-gray-500 mt-2">Loading more...</p>
+        </div>
+        <div id="no-more-data" class="text-center py-4 text-gray-400 hidden">
+            <p>No more analyses to load</p>
+        </div>
+    </div>
+    
+    <!-- Testimonials Section -->
+    <div class="mt-12">
+        <h2 class="text-2xl font-bold text-center mb-8">What Our Users Say</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="bg-white rounded-lg shadow-md p-6 border border-gray-100 testimonial-card">
+                <div class="text-yellow-400 mb-3">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="text-gray-700 italic">"I applied to 20+ jobs with no luck. After using this ATS analyzer, I started getting more responses!"</p>
+                <div class="flex items-center mt-4">
+                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-green-600"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="font-semibold text-gray-900">Anna Peterson</p>
+                        <p class="text-sm text-gray-500">Marketing Manager</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-6 border border-gray-100 testimonial-card">
+                <div class="text-yellow-400 mb-3">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="text-gray-700 italic">"The AI suggestions improved my bullet points so much! Landed interviews within a week."</p>
+                <div class="flex items-center mt-4">
+                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-green-600"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="font-semibold text-gray-900">David Johnson</p>
+                        <p class="text-sm text-gray-500">Software Engineer</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-6 border border-gray-100 testimonial-card">
+                <div class="text-yellow-400 mb-3">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="text-gray-700 italic">"Finally getting interviews after using this tool! Fixed all my ATS issues."</p>
+                <div class="flex items-center mt-4">
+                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-green-600"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="font-semibold text-gray-900">Sophia Miller</p>
+                        <p class="text-sm text-gray-500">Data Scientist</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Infinite Scroll JavaScript -->
+<script>
+    let currentPage = 1;
+    let isLoading = false;
+    let hasMoreData = true;
+    
+    function loadMoreAnalyses() {
+        if (isLoading || !hasMoreData) return;
+        
+        isLoading = true;
+        currentPage++;
+        
+        // Show loading spinner
+        const spinner = document.getElementById('loading-spinner');
+        if (spinner) spinner.classList.remove('hidden');
+        
+        fetch(`/dashboard/get-more/?page=${currentPage}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.analyses && data.analyses.length > 0) {
+                    const container = document.getElementById('recent-analyses-container');
+                    
+                    data.analyses.forEach(analysis => {
+                        const missingKeywords = analysis.missing_keywords || [];
+                        const missingHtml = missingKeywords.length > 0 
+                            ? `<p class="text-sm text-gray-500 mt-1">Missing: ${missingKeywords.slice(0,3).join(', ')}</p>`
+                            : '';
+                        
+                        const html = `
+                            <div class="p-6 hover:bg-gray-50 analysis-item">
+                                <div class="flex items-center justify-between flex-wrap">
+                                    <div>
+                                        <p class="font-medium text-gray-900">
+                                            Analysis from ${analysis.date}
+                                        </p>
+                                        ${missingHtml}
+                                    </div>
+                                    <div class="flex items-center space-x-4">
+                                        <div class="text-2xl font-bold ${analysis.score_color}">
+                                            ${analysis.score}%
+                                        </div>
+                                        <a href="/analyzer/results/${analysis.id}/" class="text-blue-600 hover:text-blue-700">
+                                            View Details <i class="fas fa-arrow-right ml-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        container.insertAdjacentHTML('beforeend', html);
+                    });
+                    
+                    hasMoreData = data.has_next;
+                    
+                    if (!hasMoreData) {
+                        const noMore = document.getElementById('no-more-data');
+                        if (noMore) noMore.classList.remove('hidden');
+                    }
+                } else {
+                    hasMoreData = false;
+                    const noMore = document.getElementById('no-more-data');
+                    if (noMore) noMore.classList.remove('hidden');
+                }
+                
+                isLoading = false;
+                if (spinner) spinner.classList.add('hidden');
+            })
+            .catch(error => {
+                console.error('Error loading more analyses:', error);
+                isLoading = false;
+                if (spinner) spinner.classList.add('hidden');
+            });
+    }
+    
+    // Infinite scroll detection
+    window.addEventListener('scroll', function() {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
+            loadMoreAnalyses();
+        }
+    });
+</script>
+{% endblock %}

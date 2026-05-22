@@ -1,0 +1,260 @@
+<!-- templates/analyzer/new_analysis.html - FREE VERSION -->
+{% extends 'base.html' %}
+{% block title %}New Analysis - ATS Analyzer{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dropzone {
+        border: 2px dashed #cbd5e1;
+        transition: all 0.3s ease;
+    }
+    .dropzone.drag-over {
+        border-color: #3b82f6;
+        background-color: #eff6ff;
+    }
+    .trust-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .trust-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">Analyze Your Resume</h1>
+        <p class="text-gray-600 mt-2">Upload your resume and paste the job description for instant ATS scoring</p>
+    </div>
+    
+    <div class="grid md:grid-cols-2 gap-8">
+        <!-- Left: Resume Upload -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold mb-4">📄 Upload Resume</h2>
+            
+            <div id="dropzone" class="dropzone rounded-lg p-8 text-center cursor-pointer">
+                <i class="fas fa-cloud-upload-alt text-5xl text-gray-400 mb-4"></i>
+                <p class="text-gray-600">Drag & drop your resume here</p>
+                <p class="text-sm text-gray-500 mt-1">PDF or DOCX (Max 10MB)</p>
+                <input type="file" id="resumeInput" accept=".pdf,.docx" class="hidden">
+                <button type="button" id="browseBtn" class="mt-4 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition">
+                    Browse Files
+                </button>
+            </div>
+            
+            <div id="fileInfo" class="hidden mt-4 p-3 bg-green-50 rounded-lg">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <i class="fas fa-file-pdf text-red-500 mr-2"></i>
+                        <span id="fileName" class="text-gray-700"></span>
+                    </div>
+                    <button id="removeFile" class="text-red-500 hover:text-red-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right: Job Description -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold mb-4">💼 Job Description</h2>
+            
+            <textarea id="jobDescription" rows="10" 
+                      class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Paste the complete job description here..."></textarea>
+            
+            <div class="mt-4 flex justify-between items-center">
+                <div class="text-sm text-gray-500">
+                    <i class="fas fa-info-circle"></i>
+                    <span id="charCount">0</span> characters
+                </div>
+                <button id="analyzeBtn" 
+                        class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                        disabled>
+                    Analyze Resume
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- FREE FOREVER BANNER - Replaced Credits Section -->
+    <div class="mt-8 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200">
+        <div class="flex items-center justify-between flex-wrap">
+            <div class="flex items-center">
+                <i class="fas fa-gem text-green-600 text-2xl mr-3"></i>
+                <div>
+                    <p class="font-semibold text-gray-900">
+                        🎉 <span class="text-green-600">Completely FREE!</span> Unlimited analyses
+                    </p>
+                    <p class="text-sm text-gray-600">No credit card required • No limits • Forever free</p>
+                </div>
+            </div>
+            <span class="bg-green-600 text-white px-4 py-2 rounded-lg">
+                <i class="fas fa-check-circle mr-1"></i> Free Forever
+            </span>
+        </div>
+    </div>
+    
+    <!-- TRUST BADGES SECTION -->
+    <div class="mt-12">
+        <h2 class="text-xl font-bold text-center mb-6">Trusted by Job Seekers</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="bg-gray-50 rounded-lg p-4 text-center trust-card">
+                <p class="text-2xl font-bold text-blue-600">10,000+</p>
+                <p class="text-gray-600">Resumes Analyzed</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-4 text-center trust-card">
+                <p class="text-2xl font-bold text-green-600">85%</p>
+                <p class="text-gray-600">Interview Success Rate</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    // Wait for DOM to load
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropzone = document.getElementById('dropzone');
+        const resumeInput = document.getElementById('resumeInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const removeFile = document.getElementById('removeFile');
+        const jobDesc = document.getElementById('jobDescription');
+        const charCount = document.getElementById('charCount');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        
+        let selectedFile = null;
+        
+        // Character counter
+        if (jobDesc) {
+            jobDesc.addEventListener('input', () => {
+                const count = jobDesc.value.length;
+                charCount.textContent = count;
+                checkForm();
+            });
+        }
+        
+        // Drag & drop
+        if (dropzone) {
+            dropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropzone.classList.add('drag-over');
+            });
+            
+            dropzone.addEventListener('dragleave', () => {
+                dropzone.classList.remove('drag-over');
+            });
+            
+            dropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('drag-over');
+                const file = e.dataTransfer.files[0];
+                if (file && (file.name.endsWith('.pdf') || file.name.endsWith('.docx'))) {
+                    handleFile(file);
+                } else {
+                    alert('Please upload PDF or DOCX file');
+                }
+            });
+        }
+        
+        // Browse button
+        const browseBtn = document.getElementById('browseBtn');
+        if (browseBtn) {
+            browseBtn.addEventListener('click', () => {
+                resumeInput.click();
+            });
+        }
+        
+        // File input change
+        if (resumeInput) {
+            resumeInput.addEventListener('change', (e) => {
+                if (e.target.files[0]) handleFile(e.target.files[0]);
+            });
+        }
+        
+        function handleFile(file) {
+            selectedFile = file;
+            fileName.textContent = file.name;
+            fileInfo.classList.remove('hidden');
+            dropzone.classList.add('hidden');
+            checkForm();
+        }
+        
+        // Remove file
+        if (removeFile) {
+            removeFile.addEventListener('click', () => {
+                selectedFile = null;
+                fileInfo.classList.add('hidden');
+                dropzone.classList.remove('hidden');
+                resumeInput.value = '';
+                checkForm();
+            });
+        }
+        
+        function checkForm() {
+            const hasFile = selectedFile !== null;
+            const hasJD = jobDesc && jobDesc.value.trim().length > 50;
+            if (analyzeBtn) {
+                analyzeBtn.disabled = !(hasFile && hasJD);
+            }
+        }
+        
+        // Analyze button
+        if (analyzeBtn) {
+            analyzeBtn.addEventListener('click', async () => {
+                if (!selectedFile || !jobDesc.value.trim()) return;
+                
+                const formData = new FormData();
+                formData.append('resume', selectedFile);
+                formData.append('job_description', jobDesc.value);
+                
+                analyzeBtn.disabled = true;
+                analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+                
+                try {
+                    const response = await fetch('/analyzer/upload/', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        window.location.href = data.redirect_url;
+                    } else {
+                        alert(data.error || 'Analysis failed');
+                        analyzeBtn.disabled = false;
+                        analyzeBtn.innerHTML = 'Analyze Resume';
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Network error: ' + error.message);
+                    analyzeBtn.disabled = false;
+                    analyzeBtn.innerHTML = 'Analyze Resume';
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

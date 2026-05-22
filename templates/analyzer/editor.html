@@ -1,0 +1,30 @@
+<div class="flex gap-8">
+    <!-- Left: Editor -->
+    <div class="w-1/2">
+        <textarea id="bulletInput" class="w-full border rounded p-2" 
+                  placeholder="Paste your bullet point here..."></textarea>
+        <button onclick="getAISuggestion()" class="bg-blue-600 text-white px-4 py-2 rounded mt-2">
+            ✨ Improve with AI
+        </button>
+        <div id="suggestion" class="mt-4 p-3 bg-yellow-50 rounded hidden"></div>
+    </div>
+    
+    <!-- Right: Live Preview (like Samantha Williams example) -->
+    <div class="w-1/2 border rounded p-4 bg-white">
+        <div id="preview" class="prose"></div>
+    </div>
+</div>
+
+<script>
+async function getAISuggestion() {
+    const text = document.getElementById('bulletInput').value;
+    const response = await fetch('/analyzer/ai-improve/', {
+        method: 'POST',
+        body: JSON.stringify({text: text}),
+        headers: {'Content-Type': 'application/json'}
+    });
+    const data = await response.json();
+    document.getElementById('suggestion').innerHTML = data.suggestion;
+    document.getElementById('suggestion').classList.remove('hidden');
+}
+</script>

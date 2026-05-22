@@ -1,0 +1,57 @@
+<!-- templates/dashboard/onboarding.html -->
+{% extends 'base.html' %}
+
+{% block title %}Welcome to ATS Analyzer{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-12">
+    <div class="bg-white rounded-lg shadow-md p-8">
+        <div class="text-center mb-8">
+            <i class="fas fa-rocket text-5xl text-blue-600 mb-4"></i>
+            <h1 class="text-3xl font-bold text-gray-900">Welcome to ATS Analyzer!</h1>
+            <p class="text-gray-600 mt-2">Let's get you started on your journey to better resumes.</p>
+        </div>
+        
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+            
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">What's your current job title?</label>
+                <input type="text" name="job_title" placeholder="e.g., Software Engineer, Marketing Manager" 
+                       class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Years of experience</label>
+                <select name="experience" class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="0-1">0-1 years</option>
+                    <option value="2-4">2-4 years</option>
+                    <option value="5-7">5-7 years</option>
+                    <option value="8+">8+ years</option>
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">What's your goal?</label>
+                <select name="goal" class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="new_job">Find a new job</option>
+                    <option value="promotion">Get a promotion</option>
+                    <option value="career_change">Change career path</option>
+                    <option value="improve">Improve my resume</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition text-lg font-semibold">
+                Get Started
+            </button>
+        </form>
+        
+        <div class="mt-6 p-4 bg-blue-50 rounded-lg text-center">
+            <p class="text-sm text-gray-600">
+                <i class="fas fa-gem text-blue-500 mr-1"></i>
+                You'll receive <strong>3 free credits</strong> to analyze your resume!
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
