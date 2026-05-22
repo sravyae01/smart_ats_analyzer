@@ -28,7 +28,12 @@ SECRET_KEY = 'django-insecure-)_l*0vuz7j+e#rbisc8bi#59oc^##70p_j=24al5*xxlbp$pon
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(' ')
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '.onrender.com',
+    'smart-ats-analyzer-m6fw.onrender.com',
+]
 
 
 # Application definition
