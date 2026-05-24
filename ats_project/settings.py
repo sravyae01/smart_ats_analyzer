@@ -33,6 +33,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '.onrender.com',
     'smart-ats-analyzer-m6fw.onrender.com',
+    '.vercel.app',
 ]
 
 
