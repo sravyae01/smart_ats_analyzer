@@ -1,4 +1,4 @@
-<!-- templates/landing.html - CORRECTED VERSION -->
+<!-- templates/landing.html - FIXED VERSION -->
 {% extends 'base.html' %}
 
 {% block title %}ATS Resume Analyzer - Land More Interviews{% endblock %}
@@ -7,34 +7,34 @@
 <div class="min-h-screen">
     <!-- Hero Section -->
     <div class="bg-gradient-to-r from-green-50 to-emerald-100 py-20">
-        <div class="max-w-7xl mx-auto px-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div>
-                    <h1 class="text-5xl md:text-6xl font-bold text-gray-800 mb-6">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-6">
                         Land more interviews with <span class="text-green-600">ATS Analyzer</span>
                     </h1>
-                    <p class="text-xl text-gray-600 mb-8">
+                    <p class="text-lg md:text-xl text-gray-600 mb-8">
                         ATS Check, AI Writer, and One-Click Job Tailoring make your resume stand out to recruiters.
                     </p>
                     <div class="flex flex-wrap gap-4">
                         {% if user.is_authenticated %}
-                            <a href="{% url 'analyzer:new' %}" class="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition shadow-lg text-lg inline-block">
+                            <a href="{% url 'analyzer:new' %}" class="bg-green-600 text-white px-6 md:px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition shadow-lg text-base md:text-lg inline-block">
                                 📊 Analyze Your Resume
                             </a>
-                            <a href="{% url 'dashboard:home' %}" class="border-2 border-green-600 text-green-600 px-8 py-3 rounded-lg font-semibold hover:bg-green-600 hover:text-white transition text-lg inline-block">
+                            <a href="{% url 'dashboard:home' %}" class="border-2 border-green-600 text-green-600 px-6 md:px-8 py-3 rounded-lg font-semibold hover:bg-green-600 hover:text-white transition text-base md:text-lg inline-block">
                                 📁 Dashboard
                             </a>
                         {% else %}
-                            <a href="{% url 'accounts:signup' %}" class="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition shadow-lg text-lg inline-block">
+                            <a href="{% url 'accounts:signup' %}" class="bg-green-600 text-white px-6 md:px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition shadow-lg text-base md:text-lg inline-block">
                                 🚀 Get Started Free
                             </a>
-                            <a href="{% url 'accounts:login' %}" class="border-2 border-green-600 text-green-600 px-8 py-3 rounded-lg font-semibold hover:bg-green-600 hover:text-white transition text-lg inline-block">
+                            <a href="{% url 'accounts:login' %}" class="border-2 border-green-600 text-green-600 px-6 md:px-8 py-3 rounded-lg font-semibold hover:bg-green-600 hover:text-white transition text-base md:text-lg inline-block">
                                 📊 Login
                             </a>
                         {% endif %}
                     </div>
                     
-                    <div class="flex flex-wrap items-center gap-8 mt-10">
+                    <div class="flex flex-wrap items-center gap-6 mt-10">
                         <div class="flex items-center gap-2">
                             <div class="flex text-yellow-500">
                                 <i class="fas fa-star"></i>
@@ -43,11 +43,11 @@
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                             </div>
-                            <span class="font-semibold text-gray-700">5,246 reviews</span>
+                            <span class="font-semibold text-gray-700">5,000+ reviews</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <i class="fas fa-users text-2xl text-green-600"></i>
-                            <span class="font-semibold text-gray-700">28,452 users landed interviews last month</span>
+                            <i class="fas fa-users text-xl text-green-600"></i>
+                            <span class="font-semibold text-gray-700">25,000+ users</span>
                         </div>
                     </div>
                 </div>
@@ -59,40 +59,39 @@
                     </div>
                     <div class="flex items-center gap-3 border-b pb-4 mb-4">
                         <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-user-circle text-4xl text-green-600"></i>
+                            <i class="fas fa-user-circle text-3xl text-green-600"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-xl text-gray-800">Erin Schaefer</h3>
-                            <p class="text-gray-500">Experienced Project Manager</p>
+                            <h3 class="font-bold text-xl text-gray-800">Sarah Johnson</h3>
+                            <p class="text-gray-500 text-sm">Senior Software Engineer</p>
                         </div>
                     </div>
                     
                     <div class="space-y-4">
                         <div>
-                            <h4 class="font-semibold text-gray-700 mb-2">Experience</h4>
+                            <h4 class="font-semibold text-gray-700 mb-2 text-sm">Experience</h4>
                             <ul class="text-gray-600 text-sm space-y-1">
-                                <li>• Over 10 years of experience in project management</li>
-                                <li>• Proven ability to manage complex projects</li>
-                                <li>• Strong communication and interpersonal skills</li>
-                                <li>• Expertise in Agile methodologies</li>
+                                <li>• 8+ years of full-stack development experience</li>
+                                <li>• Led team of 5 engineers on cloud migration</li>
+                                <li>• AWS Certified Solutions Architect</li>
                             </ul>
                         </div>
                         
                         <div>
-                            <h4 class="font-semibold text-gray-700 mb-2">Skills</h4>
+                            <h4 class="font-semibold text-gray-700 mb-2 text-sm">Skills</h4>
                             <div class="flex flex-wrap gap-2">
-                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">Leadership</span>
-                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">Communication</span>
-                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">Teamwork</span>
-                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">Problem-solving</span>
-                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">Adaptability</span>
+                                <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Python</span>
+                                <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Django</span>
+                                <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">AWS</span>
+                                <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">React</span>
+                                <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">PostgreSQL</span>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="mt-4 pt-4 border-t flex justify-between">
+                    <div class="mt-4 pt-4 border-t flex justify-between items-center">
                         <span class="text-sm text-gray-500">🏆 Top 5% Candidate</span>
-                        <span class="text-green-600 font-semibold">✓ ATS Score: 94%</span>
+                        <span class="text-green-600 font-semibold text-sm">✓ ATS Score: 94%</span>
                     </div>
                 </div>
             </div>
@@ -101,49 +100,53 @@
     
     <!-- Features Section -->
     <div class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Why Choose ATS Analyzer?</h2>
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="text-center p-6 rounded-xl hover:shadow-lg transition-shadow">
                     <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-robot text-2xl text-green-600"></i>
+                        <i class="fas fa-chart-line text-2xl text-green-600"></i>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">AI-Powered Analysis</h3>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ATS Score Analysis</h3>
                     <p class="text-gray-600">Get instant feedback on your resume's ATS compatibility</p>
                 </div>
                 <div class="text-center p-6 rounded-xl hover:shadow-lg transition-shadow">
                     <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-keyword text-2xl text-green-600"></i>
+                        <i class="fas fa-keyboard text-2xl text-green-600"></i>
                     </div>
                     <h3 class="text-xl font-semibold text-gray-800 mb-2">Keyword Optimization</h3>
                     <p class="text-gray-600">Discover missing keywords to beat applicant tracking systems</p>
                 </div>
                 <div class="text-center p-6 rounded-xl hover:shadow-lg transition-shadow">
                     <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-magic text-2xl text-green-600"></i>
+                        <i class="fas fa-edit text-2xl text-green-600"></i>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">AI Rewrites</h3>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Instant Rewrites</h3>
                     <p class="text-gray-600">Improve your bullet points with AI-powered suggestions</p>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Stats Section -->
+    <!-- How It Works Section -->
     <div class="py-16 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">How It Works</h2>
             <div class="grid md:grid-cols-3 gap-8 text-center">
                 <div>
-                    <div class="text-4xl font-bold text-green-600">10,000+</div>
-                    <p class="text-gray-600 mt-2">Resumes Analyzed</p>
+                    <div class="w-20 h-20 bg-green-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-lg">1</div>
+                    <h3 class="text-xl font-semibold mb-2">Upload Resume</h3>
+                    <p class="text-gray-600">Upload your PDF or DOCX resume</p>
                 </div>
                 <div>
-                    <div class="text-4xl font-bold text-green-600">85%</div>
-                    <p class="text-gray-600 mt-2">Interview Success Rate</p>
+                    <div class="w-20 h-20 bg-green-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-lg">2</div>
+                    <h3 class="text-xl font-semibold mb-2">Paste Job Description</h3>
+                    <p class="text-gray-600">Copy and paste the job description</p>
                 </div>
                 <div>
-                    <div class="text-4xl font-bold text-green-600">2x</div>
-                    <p class="text-gray-600 mt-2">Faster Job Placement</p>
+                    <div class="w-20 h-20 bg-green-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-lg">3</div>
+                    <h3 class="text-xl font-semibold mb-2">Get ATS Score</h3>
+                    <p class="text-gray-600">Receive actionable improvement suggestions</p>
                 </div>
             </div>
         </div>
@@ -151,15 +154,15 @@
     
     <!-- CTA Section -->
     <div class="py-16 bg-gradient-to-r from-green-50 to-emerald-100">
-        <div class="max-w-3xl mx-auto px-4 text-center">
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">Ready to Land More Interviews?</h2>
-            <p class="text-xl text-gray-600 mb-8">Join thousands of job seekers who improved their resumes with ATS Analyzer</p>
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4">Ready to Land More Interviews?</h2>
+            <p class="text-lg md:text-xl text-gray-600 mb-8">Join thousands of job seekers who improved their resumes with ATS Analyzer</p>
             {% if user.is_authenticated %}
-                <a href="{% url 'analyzer:new' %}" class="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold inline-flex items-center gap-2 text-lg shadow-lg hover:bg-green-700 transition">
+                <a href="{% url 'analyzer:new' %}" class="bg-green-600 text-white px-6 md:px-8 py-3 rounded-lg font-semibold inline-flex items-center gap-2 text-base md:text-lg shadow-lg hover:bg-green-700 transition">
                     Analyze Your Resume <i class="fas fa-arrow-right"></i>
                 </a>
             {% else %}
-                <a href="{% url 'accounts:signup' %}" class="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold inline-flex items-center gap-2 text-lg shadow-lg hover:bg-green-700 transition">
+                <a href="{% url 'accounts:signup' %}" class="bg-green-600 text-white px-6 md:px-8 py-3 rounded-lg font-semibold inline-flex items-center gap-2 text-base md:text-lg shadow-lg hover:bg-green-700 transition">
                     Get Started Free <i class="fas fa-arrow-right"></i>
                 </a>
             {% endif %}

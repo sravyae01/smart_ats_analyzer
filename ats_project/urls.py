@@ -1,4 +1,3 @@
-# ats_project/urls.py - LANDING PAGE ALWAYS FIRST (Like Enhancv)
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -7,9 +6,10 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Landing page is ALWAYS the root URL - no redirects
+    # Landing page is ALWAYS the root URL
     path('', TemplateView.as_view(template_name='landing.html'), name='landing'),
-    path('', include('accounts.urls')),
+    # Accounts URLs (login, signup, logout)
+    path('accounts/', include('accounts.urls')),  # ← Removed duplicate '', added 'accounts/'
     path('dashboard/', include('dashboard.urls')),
     path('analyzer/', include('analyzer.urls')),
 ]
