@@ -1,18 +1,27 @@
-# ats_project/urls.py
 from django.contrib import admin
 from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
-from django.views.generic import TemplateView
+from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("""
+        <h1 style="color: green; text-align: center; margin-top: 50px;">
+            🚀 Smart ATS Resume Analyzer
+        </h1>
+        <p style="text-align: center; font-size: 18px;">
+            Your Django project is working!
+        </p>
+        <hr>
+        <p style="text-align: center;">
+            <a href="/admin/">Admin Panel</a> | 
+            <a href="/accounts/login/">Login</a> | 
+            <a href="/accounts/signup/">Sign Up</a>
+        </p>
+    """)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='landing.html'), name='landing'),
+    path('', home, name='home'),
     path('accounts/', include('accounts.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('analyzer/', include('analyzer.urls')),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
