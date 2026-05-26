@@ -92,9 +92,8 @@ def login_view(request):
 def logout_view(request):
     """User logout"""
     logout(request)
-    messages.info(request, 'You have been logged out. Come back soon!')
-    return redirect('landing')
-
+    messages.success(request, 'You have been successfully logged out.')
+    return redirect('home')  # ← Now redirects to landing page
 
 @login_required
 def profile_view(request):

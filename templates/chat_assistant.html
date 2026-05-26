@@ -107,6 +107,8 @@
         gap: 8px;
         flex-wrap: wrap;
         margin-bottom: 12px;
+        background: rgba(255,255,255,0.9);
+        padding: 8px 16px;
     }
     
     .quick-btn {
@@ -125,7 +127,7 @@
     }
     
     /* Dark mode adjustments */
-        .dark-mode .bot-message .message-bubble {
+    .dark-mode .bot-message .message-bubble {
         background: #1a1a2e;
         color: #e0e0e0;
         border-color: #2a2a4a;
@@ -146,10 +148,17 @@
         background: #667eea;
         color: white;
     }
+    
+    .dark-mode .quick-questions {
+        background: #16213e;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
+<!-- CSRF Token for JavaScript -->
+<input type="hidden" id="csrf-token" value="{{ csrf_token }}">
+
 <div class="chat-container">
     <!-- Chat Header -->
     <div class="bg-white shadow-md px-6 py-4 dark-mode:bg-gray-800">
@@ -168,14 +177,14 @@
     <div class="chat-messages" id="chatMessages">
         <div class="message bot-message">
             <div class="message-bubble">
-                👋 Hi {{ user.first_name|default:user.email }}! I'm your AI Resume Assistant.<br>
+                👋 Hi {{ user.first_name|default:user.email }}! I'm your AI Resume Assistant.<br><br>
                 I can help you with:
-                <ul class="mt-2 space-y-1">
-                    <li>📝 • Resume writing tips</li>
-                    <li>🎯 • ATS optimization advice</li>
-                    <li>🔑 • Keyword suggestions</li>
-                    <li>📊 • Score improvement strategies</li>
-                    <li>💼 • Interview preparation</li>
+                <ul class="mt-2 space-y-1" style="list-style: none; padding-left: 0;">
+                    <li>📝 Resume writing tips</li>
+                    <li>🎯 ATS optimization advice</li>
+                    <li>🔑 Keyword suggestions</li>
+                    <li>📊 Score improvement strategies</li>
+                    <li>💼 Interview preparation</li>
                 </ul>
                 <div class="message-time">Just now</div>
             </div>
@@ -183,7 +192,7 @@
     </div>
     
     <!-- Quick Questions -->
-    <div class="quick-questions px-4 pt-2">
+    <div class="quick-questions">
         <button class="quick-btn" onclick="sendQuickQuestion('How can I improve my ATS score?')">
             📈 Improve ATS score
         </button>
@@ -282,6 +291,8 @@
             
             if (data.reply) {
                 addMessage(formatBotMessage(data.reply), false);
+            } else if (data.error) {
+                addMessage("Sorry, " + data.error, false);
             } else {
                 addMessage("Sorry, I'm having trouble responding. Please try again.", false);
             }

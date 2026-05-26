@@ -150,6 +150,4 @@ LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 # Security settings for production (only when DEBUG is False)
 if not DEBUG:
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = False
